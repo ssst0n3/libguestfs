@@ -51,7 +51,11 @@ RUN set -eux; \
     rm -rf /opt/rootfs/usr/share/doc /opt/rootfs/usr/share/man /opt/rootfs/usr/share/info /opt/rootfs/usr/share/bash-completion; \
     rm -rf /opt/rootfs/usr/share/zoneinfo /opt/rootfs/usr/share/X11; \
     rm -rf /opt/rootfs/usr/share/grub /opt/rootfs/usr/share/libvirt /opt/rootfs/usr/share/qemu/keymaps; \
+    rm -rf /opt/rootfs/usr/share/augeas/lenses/dist/tests; \
     rm -f /opt/rootfs/usr/bin/qemu-system-i386; \
+    rm -f /opt/rootfs/usr/libexec/qemu-system-i386; \
+    rm -rf /opt/rootfs/usr/lib/ipxe; \
+    rm -f /opt/rootfs/usr/lib/qemu/qemu-bridge-helper /opt/rootfs/usr/lib/qemu/virtfs-proxy-helper /opt/rootfs/usr/lib/qemu/virtiofsd; \
     rm -f /opt/rootfs/usr/lib/x86_64-linux-gnu/libapt-pkg.so* /opt/rootfs/usr/lib/x86_64-linux-gnu/libapt-private.so*; \
     rm -f /opt/rootfs/usr/share/qemu/openbios-* /opt/rootfs/usr/share/qemu/opensbi-* /opt/rootfs/usr/share/qemu/skiboot.lid /opt/rootfs/usr/share/qemu/slof.bin /opt/rootfs/usr/share/qemu/hppa-firmware.img /opt/rootfs/usr/share/qemu/palcode-clipper /opt/rootfs/usr/share/qemu/s390-*.img /opt/rootfs/usr/share/qemu/bamboo.dtb /opt/rootfs/usr/share/qemu/canyonlands.dtb /opt/rootfs/usr/share/qemu/npcm7xx_bootrom.bin /opt/rootfs/usr/share/qemu/trace-events-all; \
     rm -rf /opt/rootfs/usr/lib/modules/*/kernel/arch/x86/kvm /opt/rootfs/usr/lib/modules/*/kernel/arch/x86/events; \
