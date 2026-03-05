@@ -7,7 +7,7 @@ help:
 	@printf '%s\n' 'Available targets:'
 	@printf '%s\n' '  make build     Build image ($(IMAGE)) for $(PLATFORM)'
 	@printf '%s\n' '  make size      Print image size (bytes + human-readable)'
-	@printf '%s\n' '  make test      Smoke test: virt-sparsify --help'
+	@printf '%s\n' '  make test      Smoke tests: help + minimal qcow2 sparsify'
 	@printf '%s\n' '  make check     Run build + size + test'
 	@printf '%s\n' '  make ci        Run check, then buildx push with TAGS/LABELS env'
 
@@ -20,6 +20,7 @@ size: build
 
 test: build
 	docker run --rm $(IMAGE) virt-sparsify --help
+	docker run --rm -w /tmp $(IMAGE) bash -c 'set -eu; workdir=$$(mktemp -d); trap "rm -rf $$workdir" EXIT; cd "$$workdir"; qemu-img create -f qcow2 vm.qcow2 64M >/dev/null; virt-sparsify --compress vm.qcow2 shrunk.qcow2 >/dev/null'
 
 check: build size test
 
