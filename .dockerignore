@@ -1,0 +1,19 @@
+.git
+.github
+.gitignore
+
+# Build outputs
+dist
+build
+out
+target
+
+# Dependencies and caches
+node_modules
+.cache
+__pycache__
+
+# IDE/OS
+.vscode
+.idea
+.DS_Store
