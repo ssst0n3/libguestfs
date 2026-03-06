@@ -46,30 +46,69 @@ RUN set -eux; \
     cp -a /bin /boot /etc /lib /lib64 /sbin /usr /opt/rootfs/; \
     mkdir -p /opt/rootfs/var/lib; \
     cp -a /var/lib/dpkg /opt/rootfs/var/lib/; \
+    rm -f /opt/rootfs/var/lib/dpkg/info/*.md5sums /opt/rootfs/var/lib/dpkg/info/*.symbols /opt/rootfs/var/lib/dpkg/info/*.templates; \
     mkdir -p /opt/rootfs/tmp /opt/rootfs/var/tmp; \
     rm -rf /opt/rootfs/var/cache/apt /opt/rootfs/var/lib/apt /opt/rootfs/var/log/*; \
-    rm -rf /opt/rootfs/usr/share/doc /opt/rootfs/usr/share/man /opt/rootfs/usr/share/info /opt/rootfs/usr/share/bash-completion; \
-    rm -rf /opt/rootfs/usr/share/zoneinfo /opt/rootfs/usr/share/X11; \
-    rm -rf /opt/rootfs/usr/share/grub /opt/rootfs/usr/share/libvirt /opt/rootfs/usr/share/qemu/keymaps; \
-    rm -rf /opt/rootfs/usr/share/augeas/lenses/dist/tests; \
+    find /opt/rootfs/usr/share -mindepth 1 -maxdepth 1 \
+      ! -name qemu \
+      ! -name seabios \
+      ! -name misc \
+      -exec rm -rf {} +; \
+    find /opt/rootfs/usr/share/misc -mindepth 1 -maxdepth 1 \
+      ! -name magic \
+      ! -name magic.mgc \
+      -exec rm -rf {} +; \
     rm -f /opt/rootfs/usr/bin/qemu-system-i386; \
     rm -f /opt/rootfs/usr/libexec/qemu-system-i386; \
     rm -rf /opt/rootfs/usr/lib/ipxe; \
     rm -f /opt/rootfs/usr/lib/qemu/qemu-bridge-helper /opt/rootfs/usr/lib/qemu/virtfs-proxy-helper /opt/rootfs/usr/lib/qemu/virtiofsd; \
     rm -f /opt/rootfs/usr/lib/x86_64-linux-gnu/libapt-pkg.so* /opt/rootfs/usr/lib/x86_64-linux-gnu/libapt-private.so*; \
     rm -f /opt/rootfs/usr/share/qemu/openbios-* /opt/rootfs/usr/share/qemu/opensbi-* /opt/rootfs/usr/share/qemu/skiboot.lid /opt/rootfs/usr/share/qemu/slof.bin /opt/rootfs/usr/share/qemu/hppa-firmware.img /opt/rootfs/usr/share/qemu/palcode-clipper /opt/rootfs/usr/share/qemu/s390-*.img /opt/rootfs/usr/share/qemu/bamboo.dtb /opt/rootfs/usr/share/qemu/canyonlands.dtb /opt/rootfs/usr/share/qemu/npcm7xx_bootrom.bin /opt/rootfs/usr/share/qemu/trace-events-all; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/arch/x86/kvm /opt/rootfs/usr/lib/modules/*/kernel/arch/x86/events; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/drivers/infiniband /opt/rootfs/usr/lib/modules/*/kernel/drivers/comedi; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/ethernet/mellanox; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/fs/nfs /opt/rootfs/usr/lib/modules/*/kernel/fs/nfsd /opt/rootfs/usr/lib/modules/*/kernel/fs/smb /opt/rootfs/usr/lib/modules/*/kernel/fs/ceph /opt/rootfs/usr/lib/modules/*/kernel/fs/orangefs; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/net/sunrpc /opt/rootfs/usr/lib/modules/*/kernel/net/ceph /opt/rootfs/usr/lib/modules/*/kernel/net/sctp /opt/rootfs/usr/lib/modules/*/kernel/net/tipc /opt/rootfs/usr/lib/modules/*/kernel/net/openvswitch /opt/rootfs/usr/lib/modules/*/kernel/net/rds /opt/rootfs/usr/lib/modules/*/kernel/net/smc /opt/rootfs/usr/lib/modules/*/kernel/net/dccp /opt/rootfs/usr/lib/modules/*/kernel/net/l2tp; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/net/netfilter /opt/rootfs/usr/lib/modules/*/kernel/net/sched; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/bonding /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/wwan /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/wireguard /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/vxlan /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/team /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/hyperv /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/vmxnet3 /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/xen-netback; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/ethernet/amazon /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/ethernet/microsoft /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/ethernet/google /opt/rootfs/usr/lib/modules/*/kernel/drivers/net/ethernet/intel; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/drivers/hv /opt/rootfs/usr/lib/modules/*/kernel/drivers/xen; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/fs/btrfs /opt/rootfs/usr/lib/modules/*/kernel/fs/cachefiles /opt/rootfs/usr/lib/modules/*/kernel/fs/fscache /opt/rootfs/usr/lib/modules/*/kernel/fs/netfs /opt/rootfs/usr/lib/modules/*/kernel/fs/lockd /opt/rootfs/usr/lib/modules/*/kernel/fs/nfs_common; \
-    rm -f /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/raid0.ko /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/raid1.ko /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/raid10.ko /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/raid456.ko /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/md-mod.ko /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/faulty.ko /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/multipath.ko; \
-    rm -rf /opt/rootfs/usr/lib/modules/*/kernel/drivers/md/bcache; \
+    rm -f /opt/rootfs/usr/share/seabios/vgabios*; \
+    for moddir in /opt/rootfs/usr/lib/modules/*/kernel; do \
+      find "$moddir/drivers" -mindepth 1 -maxdepth 1 -type d \
+        ! -name acpi \
+        ! -name ata \
+        ! -name block \
+        ! -name cdrom \
+        ! -name char \
+        ! -name firmware \
+        ! -name md \
+        ! -name net \
+        ! -name nvdimm \
+        ! -name nvme \
+        ! -name pci \
+        ! -name scsi \
+        ! -name uio \
+        ! -name virtio \
+        ! -name vhost \
+        ! -name watchdog \
+        -exec rm -rf {} +; \
+      find "$moddir/fs" -mindepth 1 -maxdepth 1 \
+        ! -name autofs \
+        ! -name configfs \
+        ! -name efivarfs \
+        ! -name fat \
+        ! -name fuse \
+        ! -name isofs \
+        ! -name nls \
+        ! -name overlayfs \
+        ! -name pstore \
+        ! -name quota \
+        ! -name xfs \
+        -exec rm -rf {} +; \
+      find "$moddir/net" -mindepth 1 -maxdepth 1 -type d \
+        ! -name core \
+        ! -name ipv4 \
+        ! -name ipv6 \
+        ! -name netlink \
+        ! -name unix \
+        -exec rm -rf {} +; \
+      rm -rf "$moddir/arch/x86/kvm" "$moddir/arch/x86/events"; \
+      rm -rf "$moddir/drivers/scsi/mpi3mr" "$moddir/drivers/scsi/libsas"; \
+      rm -rf "$moddir/drivers/net/ethernet/mellanox" "$moddir/drivers/net/ethernet/amazon" "$moddir/drivers/net/ethernet/microsoft" "$moddir/drivers/net/ethernet/google" "$moddir/drivers/net/ethernet/intel"; \
+      rm -rf "$moddir/drivers/net/bonding" "$moddir/drivers/net/wwan" "$moddir/drivers/net/wireguard" "$moddir/drivers/net/vxlan" "$moddir/drivers/net/team" "$moddir/drivers/net/hyperv" "$moddir/drivers/net/vmxnet3" "$moddir/drivers/net/xen-netback"; \
+    done; \
     rm -rf /opt/rootfs/usr/include /opt/rootfs/usr/src; \
     rm -f /opt/rootfs/boot/System.map-* /opt/rootfs/boot/config-* /opt/rootfs/boot/initrd.img-*; \
     rm -rf /opt/rootfs/usr/lib/apt; \
